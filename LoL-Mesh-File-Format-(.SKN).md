@@ -40,7 +40,10 @@ Field | Type | Size (bytes) | Description
 unknown(v4) | int | 4  | Version 4 only. Should be zero.
 numIndices  | int | 4  | number of Indices in the file
 numVertices | int | 4  | number of vertices in the file
-MetaData(v4)| ?   | 48 | Version 4 only. unknown meta data. First byte is 52 (0x34, size of vertex structure), bytes 2-8 are 0. Some part of bytes 25-32 contain health bar vertical alignment (or something that affects it, like model size), probably as a float.
+Vertex Size | uint   | 4 | (v4) Size of the Vertex structure
+Contains Tangent | bool | 4 | (v4) Whether the Vertex structure contains a Tangent
+Bounding Box | float[3], float[3] | 24 | (v4) Bounding Box of the whole model. Structure is `Min` `Max`
+Bounding Sphere | float[3], float | 16 | (v4) Bounding Sphere of the whole model. Structure is `Position`, `Radius`
             |     | 12, 60(v4) | total
 
 ## Single Index Data
@@ -61,5 +64,6 @@ bone Indices  		| byte[4]  |  4  | Bones that affect this vertex
 bone weights 		| float[4] | 16  | Amount that the bones above affect this vertex
 normal vector 		| float[3] | 12  | Normal vector of this vertex
 texture coordinates     | float[2] |  8  | This vertex's UV texture coordinates
-                        |          | 52  | total
+Tangent | byte[4] | 4 | The Tangent of this Vertex
+                        |          | 52, 56(v4 and Contains Tangent)  | total
 
