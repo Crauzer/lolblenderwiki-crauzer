@@ -5,12 +5,11 @@ Version 1 is the simplest. It has a header, a materials block, a meta-data block
 # Format (Versions 1, 2, and 4)
 Field | Type | Size (bytes) | Condition | Description
 ------|------|--------------|-----------|-------------
-header | [SKN File Header](https://github.com/lispascal/lolblender/wiki/LoL-Mesh-File-Format-(.SKN)#skn-file-header)  | 8	  | | contains matsExist
-numMats| int	 | 4  | matsExist > 0 | number of Material Header blocks
-MaterialHeaders * \[numMats\] | [Material Header Data](https://github.com/lispascal/lolblender/wiki/LoL-Mesh-File-Format-(.SKN)#material-headers) | 80*numMaterials | matsExist > 0 |
+header | [SKN File Header](https://github.com/lispascal/lolblender/wiki/LoL-Mesh-File-Format-(.SKN)#skn-file-header)  | 8	  | |
+MaterialHeader * [Material Count](https://github.com/lispascal/lolblender/wiki/LoL-Mesh-File-Format-(.SKN)#skn-file-header) | [Material Header Data](https://github.com/lispascal/lolblender/wiki/LoL-Mesh-File-Format-(.SKN)#material-header) | 80*[Material Count](https://github.com/lispascal/lolblender/wiki/LoL-Mesh-File-Format-(.SKN)#skn-file-header) | |
 metaData | [Meta-Data Block](https://github.com/lispascal/lolblender/wiki/LoL-Mesh-File-Format-(.SKN)#meta-data-block) | 12-60 |  | Contains numIndices & numVertices
-indices | [Index Data](https://github.com/lispascal/lolblender/wiki/LoL-Mesh-File-Format-(.SKN)#single-index-data) * \[numIndices\]  | 4 * numIndices	  | |
-vertices | [Vertex Data](https://github.com/lispascal/lolblender/wiki/LoL-Mesh-File-Format-(.SKN)#single-vertex-data) * \[numVertices\]  | 52 * numVertices | | 
+indices | ushort | 2 * numIndices	  | |
+vertices | [Vertex Data](https://github.com/lispascal/lolblender/wiki/LoL-Mesh-File-Format-(.SKN)#single-vertex-data) * \[numVertices\]  | [Vertex Size](https://github.com/lispascal/lolblender/wiki/LoL-Mesh-File-Format-(.SKN)#meta-data-block) * numVertices | | 
 endTab | int[3] | 12 | version >= 2 | Unknown data
        |        | variable  |       | total   
 
@@ -18,12 +17,12 @@ endTab | int[3] | 12 | version >= 2 | Unknown data
 ## SKN File Header
 Field | Type | Size (bytes) | Description
 ------|------|--------------|-------------
-magic | int  | 4	    | 
-version | short | 2			| 
-matsExist | short | 2 		| 1 if material headers exist, 0 otherwise
- |  | 8 		| total
+Magic | uint  | 4 | 0x00112233
+Version | uint | 4 | either 0x1000, 0x1001, 0x1002 or 0x1004
+Material Count | uint | 4 |
+ |  | 12		| total
 
-## Material Headers
+## Material Header
 Field | Type | Size (bytes) | Description
 ------|------|--------------|-------------
 name | char[64] | 64	    | name of the material
